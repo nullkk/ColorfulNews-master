@@ -66,6 +66,7 @@ public class URLImageGetter implements Html.ImageGetter {
         mPicTotal = picTotal;
     }
 
+    //使用Glide加载，支持动态图
     @Override
     public Drawable getDrawable(final String source) {
         Drawable drawable;

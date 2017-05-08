@@ -26,14 +26,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
@@ -50,10 +49,11 @@ import com.kaku.colorfulnews.mvp.view.NewsDetailView;
 import com.kaku.colorfulnews.utils.MyUtils;
 import com.kaku.colorfulnews.utils.NetUtil;
 import com.kaku.colorfulnews.utils.TransformUtils;
-import com.kaku.colorfulnews.widget.CustomTagHandler;
+import com.kaku.colorfulnews.widget.RichTextView;
 import com.kaku.colorfulnews.widget.URLImageGetter;
 import com.socks.library.KLog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -83,11 +83,13 @@ public class NewsDetailActivity extends BaseActivity implements NewsDetailView {
     /***
      * 时间
      */TextView mNewsDetailFromTv;
-    @BindView(R.id.news_detail_body_tv)
+  //  @BindView(R.id.news_detail_body_tv)
     /***
      * 核心
      */
-    TextView mNewsDetailBodyTv;
+   // TextView mNewsDetailBodyTv;
+    @BindView(R.id.richTextBody)
+    RichTextView richTextBody;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
     @BindView(R.id.progress_bar)
@@ -189,15 +191,37 @@ public class NewsDetailActivity extends BaseActivity implements NewsDetailView {
     }
 
     private void setBody(NewsDetail newsDetail, String newsBody) {
-        int imgTotal = newsDetail.getImg().size();
-        if (isShowBody(newsBody, imgTotal)) {
+        final int imgTotal = newsDetail.getImg().size();
+      /*  if (isShowBody(newsBody, imgTotal))
+        {
              mNewsDetailBodyTv.setMovementMethod(LinkMovementMethod.getInstance());//加这句才能让里面的超链接生效,实测经常卡机崩溃
             mUrlImageGetter = new URLImageGetter(mNewsDetailBodyTv, newsBody, imgTotal);
             CustomTagHandler customTagHandler = new CustomTagHandler(NewsDetailActivity.this);
             mNewsDetailBodyTv.setText(Html.fromHtml(newsBody, mUrlImageGetter, customTagHandler));
         } else {
             mNewsDetailBodyTv.setText(Html.fromHtml(newsBody));
-        }
+        }*/
+        richTextBody.setRichText(newsBody);
+        richTextBody.setImageClickListener(new RichTextView.OnImageClickListener() {
+            @Override
+            public void imageClicked(List<String> imageUrls, int postion,View view)
+            {
+                Toast.makeText(NewsDetailActivity.this, "总共图片的个数："+imageUrls.size(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewsDetailActivity.this, "当前点击的位置："+postion, Toast.LENGTH_SHORT).show();
+                //搞起来。
+                Intent intent = new Intent(NewsDetailActivity.this, DetailImageActivity.class);
+                int location[] = new int[2];
+                view.getLocationOnScreen(location);
+                intent.putExtra("left", location[0]);
+                intent.putExtra("top", location[1]);
+                intent.putExtra("height", view.getHeight());
+                intent.putExtra("width", view.getWidth());
+                intent.putExtra("position", postion);
+                intent.putStringArrayListExtra("imgList", (ArrayList<String>) imageUrls);
+                startActivity(intent);
+               // overridePendingTransition(0,0);
+            }
+        });
     }
 
     private boolean isShowBody(String newsBody, int imgTotal) {

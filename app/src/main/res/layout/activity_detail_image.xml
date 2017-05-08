@@ -2,8 +2,13 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.kaku.colorfulnews.mvp.ui.activities.DetailImageActivity">
-    <com.kaku.colorfulnews.widget.DragPhotoView
+   <!-- <com.kaku.colorfulnews.widget.DragPhotoView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/dragPhotoView"/>
+        android:id="@+id/dragPhotoView"/>-->
+    <android.support.v4.view.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/dragViewPage"
+        />
 </merge>
