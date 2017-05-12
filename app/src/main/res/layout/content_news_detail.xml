@@ -32,8 +32,11 @@
             android:textSize="@dimen/small"
             tools:text="澎湃新闻 06-06 17:24"/>
         <!--        android:layout_below="@id/news_detail_title_tv"
-                android:layout_marginTop="10dp"-->
+                android:layout_marginTop="10dp"
+                如需自由复制TextView等控件的文字，只是要在该控件上加上这句就好了android:textIsSelectable="true"，
+                或者Java代码加 setTextIsSelectable（true）-->
         <com.kaku.colorfulnews.widget.RichTextView
+            android:textIsSelectable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/news_detail_from_tv"

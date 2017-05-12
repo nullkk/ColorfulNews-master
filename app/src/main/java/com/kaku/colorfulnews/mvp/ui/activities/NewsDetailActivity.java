@@ -16,6 +16,9 @@
  */
 package com.kaku.colorfulnews.mvp.ui.activities;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -220,6 +223,19 @@ public class NewsDetailActivity extends BaseActivity implements NewsDetailView {
                 intent.putStringArrayListExtra("imgList", (ArrayList<String>) imageUrls);
                 startActivity(intent);
                // overridePendingTransition(0,0);
+            }
+        });
+        richTextBody.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) 
+            {
+                //获取剪贴板管理器：  
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+// 创建普通字符型ClipData  
+                ClipData mClipData = ClipData.newPlainText("Label", "这里是要复制的文字");
+// 将ClipData内容放到系统剪贴板里。  
+                cm.setPrimaryClip(mClipData);
+                return false;
             }
         });
     }
